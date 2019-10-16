@@ -443,6 +443,52 @@ jobs:
       - copy_rpm_artifacts:
           build: fedora-30
 
+  build_mingw:
+    docker:
+      - image: i386/ubuntu:xenial
+    steps:
+      - run:
+          name: Install base dependencies
+          run: >
+            apt-get update && apt-get install -y
+              autoconf
+              bison
+              cmake
+              flex
+              gettext
+              git-core
+              intltool
+              libglib2.0-dev
+              libtool
+              mingw-w64
+              nsis
+              pkg-config
+              protobuf-compiler
+              qt4-dev-tools
+              stow
+              sudo
+              texinfo
+              unzip
+              wget
+              wine
+              yasm
+      - run:
+          name: Install old libtool
+          run: |
+            wget -q -O ~/libtool.deb 'https://storage.googleapis.com/clementine-data.appspot.com/Build%20dependencies/libtool_2.2.6b-2ubuntu1_i386.deb'
+            dpkg -i ~/libtool.deb
+      - run:
+          name: Clone dependencies repo
+          run: git clone https://github.com/clementine-player/Dependencies ~/deps
+      - run:
+          name: Build dependencies
+          run: make
+          working_directory: ~/deps
+      - run:
+          name: Install depdendencies
+          run: make install
+          working_directory: ~/deps
+
   build_mac:
     macos:
       xcode: "11.0.0"
@@ -538,30 +584,31 @@ workflows:
   version: 2
   build_all:
     jobs:
-      - build_xenial_32
-      - build_xenial_64
-      - build_bionic_32
-      - build_bionic_64
-      - build_disco_32
-      - build_disco_64
-      - build_fedora_29_64
-      - build_fedora_30_64
-      - build_buster_64
-      - build_stretch_64
+      # - build_xenial_32
+      # - build_xenial_64
+      # - build_bionic_32
+      # - build_bionic_64
+      # - build_disco_32
+      # - build_disco_64
+      # - build_fedora_29_64
+      # - build_fedora_30_64
+      # - build_buster_64
+      # - build_stretch_64
+      - build_mingw
 
-      - upload_artifacts:
-          context: gcp
-          requires:
-            - build_xenial_32
-            - build_xenial_64
-            - build_bionic_32
-            - build_bionic_64
-            - build_disco_32
-            - build_disco_64
-            - build_fedora_29_64
-            - build_fedora_30_64
-            - build_buster_64
-            - build_stretch_64
-          filters:
-            branches:
-              only: master
+      # - upload_artifacts:
+      #     context: gcp
+      #     requires:
+      #       - build_xenial_32
+      #       - build_xenial_64
+      #       - build_bionic_32
+      #       - build_bionic_64
+      #       - build_disco_32
+      #       - build_disco_64
+      #       - build_fedora_29_64
+      #       - build_fedora_30_64
+      #       - build_buster_64
+      #       - build_stretch_64
+      #     filters:
+      #       branches:
+      #         only: master
