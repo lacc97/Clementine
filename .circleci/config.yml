@@ -448,9 +448,13 @@ jobs:
       - image: i386/ubuntu:xenial
     steps:
       - run:
+          name: Accept EULAs
+          command: |
+            echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
+      - run:
           name: Install base dependencies
           command: >
-            apt-get update && apt-get install -y
+            apt-get update && apt-get install -y -q
             autoconf
             bison
             cmake
