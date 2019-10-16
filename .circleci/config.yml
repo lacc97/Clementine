@@ -450,7 +450,7 @@ jobs:
       - run:
           name: Accept EULAs
           command: |
-            echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
+            echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections
       - run:
           name: Install base dependencies
           command: >
