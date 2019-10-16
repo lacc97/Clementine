@@ -449,7 +449,7 @@ jobs:
     steps:
       - run:
           name: Install base dependencies
-          run: >
+          command: >
             apt-get update && apt-get install -y
               autoconf
               bison
@@ -474,19 +474,19 @@ jobs:
               yasm
       - run:
           name: Install old libtool
-          run: |
+          command: |
             wget -q -O ~/libtool.deb 'https://storage.googleapis.com/clementine-data.appspot.com/Build%20dependencies/libtool_2.2.6b-2ubuntu1_i386.deb'
             dpkg -i ~/libtool.deb
       - run:
           name: Clone dependencies repo
-          run: git clone https://github.com/clementine-player/Dependencies ~/deps
+          command: git clone https://github.com/clementine-player/Dependencies ~/deps
       - run:
           name: Build dependencies
-          run: make
+          command: make
           working_directory: ~/deps
       - run:
           name: Install depdendencies
-          run: make install
+          command: make install
           working_directory: ~/deps
 
   build_mac:
@@ -595,7 +595,6 @@ workflows:
       # - build_buster_64
       # - build_stretch_64
       - build_mingw
-
       # - upload_artifacts:
       #     context: gcp
       #     requires:
