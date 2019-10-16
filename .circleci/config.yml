@@ -487,11 +487,11 @@ jobs:
       - run:
           name: Build dependencies
           command: make
-          working_directory: ~/deps
+          working_directory: ~/deps/windows
       - run:
           name: Install depdendencies
           command: make install
-          working_directory: ~/deps
+          working_directory: ~/deps/windows
 
   build_mac:
     macos:
