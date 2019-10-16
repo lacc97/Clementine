@@ -483,15 +483,18 @@ jobs:
             dpkg -i ~/libtool.deb
       - run:
           name: Clone dependencies repo
-          command: git clone https://github.com/clementine-player/Dependencies ~/deps
+          command: git clone https://github.com/clementine-player/Dependencies /src
+      - run:
+          name: Create target directory
+          command: mkdir -p /target/stow
       - run:
           name: Build dependencies
           command: make
-          working_directory: ~/deps/windows
+          working_directory: /src/windows
       - run:
-          name: Install depdendencies
+          name: Install dependencies
           command: make install
-          working_directory: ~/deps/windows
+          working_directory: /src/windows
 
   build_mac:
     macos:
