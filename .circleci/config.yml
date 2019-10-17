@@ -477,6 +477,9 @@ jobs:
             wine
             yasm
       - run:
+          name: Configure Mingw for POSIX threads
+          command: update-alternatives --set i686-w64-mingw32-gcc /usr/bin/i686-w64-mingw32-gcc-posix
+      - run:
           name: Install old libtool
           command: |
             wget -q -O ~/libtool.deb 'https://storage.googleapis.com/clementine-data.appspot.com/Build%20dependencies/libtool_2.2.6b-2ubuntu1_i386.deb'
