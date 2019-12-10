@@ -341,9 +341,17 @@ QString GetConfigPath(ConfigPath config) {
       if (Application::kIsPortable) {
         return QString("%1/data").arg(QCoreApplication::applicationDirPath());
       }
-#ifdef Q_OS_DARWIN
+#if defined(Q_OS_DARWIN)
       return mac::GetApplicationSupportPath() + "/" +
              QCoreApplication::organizationName();
+#elif defined(Q_OS_UNIX)
+      char* xdg = getenv("XDG_CONFIG_HOME");
+      if (xdg && *xdg) {
+        return QString("%1/%2").arg(xdg, QCoreApplication::organizationName());
+      }  else {
+        return QString("%1/.config/%2")
+            .arg(QDir::homePath(), QCoreApplication::organizationName());
+      }
 #else
       return QString("%1/.config/%2")
           .arg(QDir::homePath(), QCoreApplication::organizationName());
